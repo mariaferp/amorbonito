@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>¿Cuál es tu Huella de Amor? — Amor Bonito</title>
+<style>
+:root {
+  --rosa:        #D4547A;
+  --rosa-claro:  #FFF0F4;
+  --rosa-hover:  #FCE4EC;
+  --crema:       #FDF8F4;
+  --marron:      #3D2314;
+  --marron-med:  #7A4A35;
+  --gris:        #8A7B74;
+  --blanco:      #FFFFFF;
+  --g: #E8547A;   /* guerrera  */
+  --f: #4A90C4;   /* fortaleza */
+  --t: #8B5FA8;   /* tormenta  */
+  --r: #3DAA72;   /* renacer   */
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow-x:hidden;}
+body{font-family:'Georgia',serif;background:var(--crema);color:var(--marron);}
+
+/* ──────────── PANTALLAS ──────────── */
+.pantalla{
+  display:none;min-height:100vh;
+  flex-direction:column;align-items:center;justify-content:center;
+  padding:0 0 40px;
+}
+.pantalla.activa{display:flex;}
+
+/* ──────────── INTRO ──────────── */
+#intro{
+  background:linear-gradient(160deg,#FFF0F4 0%,#FDF8F4 55%,#F3EBF7 100%);
+  text-align:center;padding:48px 24px 64px;
+}
+.logo-big{font-size:56px;margin-bottom:6px;display:block;}
+.marca-tag{font-size:12px;letter-spacing:3px;color:var(--rosa);text-transform:uppercase;
+  font-style:italic;margin-bottom:32px;}
+.intro-titulo{font-size:clamp(24px,7vw,38px);font-weight:bold;line-height:1.25;
+  color:var(--marron);margin-bottom:10px;}
+.intro-titulo em{color:var(--rosa);font-style:normal;}
+.intro-sub{font-size:16px;line-height:1.65;color:var(--gris);max-width:360px;
+  margin:0 auto 28px;font-style:italic;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:36px;}
+.chip{background:white;border:1px solid #F0C8D4;border-radius:100px;
+  padding:6px 14px;font-size:12.5px;color:var(--rosa);}
+.btn-ppal{background:var(--rosa);color:white;border:none;border-radius:100px;
+  padding:18px 44px;font-size:17px;font-family:'Georgia',serif;font-weight:bold;
+  cursor:pointer;box-shadow:0 8px 28px rgba(212,84,122,.35);
+  transition:transform .15s,box-shadow .15s;letter-spacing:.2px;}
+.btn-ppal:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(212,84,122,.4);}
+.nota-priv{font-size:12px;color:#BBBBBB;margin-top:12px;font-style:italic;}
+
+/* ──────────── BARRA SUPERIOR ──────────── */
+.top-bar{
+  position:sticky;top:0;z-index:50;background:white;
+  padding:12px 20px 10px;box-shadow:0 2px 10px rgba(0,0,0,.06);
+  width:100%;
+}
+.top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.top-label{font-size:11.5px;color:var(--rosa);font-style:italic;letter-spacing:.4px;}
+.top-num{font-size:11.5px;color:#CCCCCC;}
+.barra-fondo{height:3px;background:#F0DDE3;border-radius:100px;overflow:hidden;}
+.barra-fill{height:100%;background:linear-gradient(90deg,var(--rosa),#B8234A);
+  border-radius:100px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+
+/* ──────────── CONTENEDOR PREGUNTA ──────────── */
+.q-wrap{width:100%;max-width:500px;padding:32px 20px 20px;flex:1;}
+
+.q-seccion-badge{
+  display:inline-block;font-size:11px;text-transform:uppercase;letter-spacing:2px;
+  background:var(--rosa-claro);color:var(--rosa);padding:5px 12px;border-radius:100px;
+  margin-bottom:16px;font-style:italic;
+}
+.q-num{font-size:11.5px;color:var(--gris);letter-spacing:1.5px;text-transform:uppercase;
+  font-style:italic;margin-bottom:10px;}
+.q-texto{font-size:clamp(18px,5vw,23px);font-weight:bold;line-height:1.4;
+  color:var(--marron);margin-bottom:24px;}
+
+/* Opciones radio */
+.opciones{display:flex;flex-direction:column;gap:10px;}
+.opt{
+  background:white;border:2px solid #EDD8DF;border-radius:14px;
+  padding:14px 16px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;
+  font-family:'Georgia',serif;color:var(--marron);font-size:15px;line-height:1.5;
+  transition:border-color .18s,background .18s;text-align:left;width:100%;
+}
+.opt:hover{border-color:var(--rosa);background:var(--rosa-claro);}
+.opt.sel{border-color:var(--rosa);background:#FCE4EC;}
+.opt-letra{min-width:28px;height:28px;background:var(--rosa-claro);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12.5px;
+  font-weight:bold;color:var(--rosa);flex-shrink:0;margin-top:1px;transition:all .18s;}
+.opt.sel .opt-letra{background:var(--rosa);color:white;}
+
+/* Input texto */
+.input-txt{
+  width:100%;background:white;border:2px solid #EDD8DF;border-radius:14px;
+  padding:16px 18px;font-family:'Georgia',serif;font-size:16px;color:var(--marron);
+  outline:none;transition:border-color .18s;
+  -webkit-appearance:none;resize:none;
+}
+.input-txt:focus{border-color:var(--rosa);}
+.input-txt::placeholder{color:#C4A8B2;}
+
+/* Botón siguiente */
+.btn-sig{
+  display:block;width:100%;margin-top:24px;
+  background:var(--rosa);color:white;border:none;border-radius:100px;
+  padding:15px;font-size:16px;font-family:'Georgia',serif;font-weight:bold;
+  cursor:pointer;opacity:.3;pointer-events:none;
+  transition:opacity .2s,transform .15s;
+}
+.btn-sig.on{opacity:1;pointer-events:all;}
+.btn-sig.on:hover{transform:translateY(-1px);}
+
+/* ──────────── TRANSICIÓN SECCIONES ──────────── */
+#transicion{
+  background:linear-gradient(160deg,#FFF0F4 0%,#F3EBF7 100%);
+  text-align:center;padding:56px 24px 72px;
+}
+.trans-emoji{font-size:52px;margin-bottom:16px;display:block;}
+.trans-titulo{font-size:clamp(22px,6vw,32px);font-weight:bold;color:var(--marron);
+  margin-bottom:12px;line-height:1.3;}
+.trans-sub{font-size:16px;color:var(--gris);line-height:1.65;max-width:340px;
+  margin:0 auto 36px;font-style:italic;}
+
+/* ──────────── CARGA ──────────── */
+#carga{
+  background:linear-gradient(160deg,#FFF0F4 0%,#FDF8F4 100%);
+  text-align:center;gap:20px;
+}
+.carga-emoji{font-size:48px;animation:pulsar 1.4s ease-in-out infinite;}
+@keyframes pulsar{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.6}}
+.carga-txt{font-size:18px;color:var(--marron);font-style:italic;max-width:280px;line-height:1.6;}
+
+/* ──────────── RESULTADO ──────────── */
+#resultado{justify-content:flex-start;padding:0 0 80px;}
+
+.res-header{
+  width:100%;padding:44px 24px 28px;text-align:center;
+}
+.res-emoji-big{font-size:64px;margin-bottom:8px;display:block;}
+.res-premarca{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;
+  color:#CCCCCC;margin-bottom:14px;font-style:italic;}
+.res-pre{font-size:15px;color:var(--gris);margin-bottom:4px;font-style:italic;}
+.res-nombre{font-size:clamp(28px,8vw,42px);font-weight:bold;line-height:1.2;margin-bottom:6px;}
+.res-apego{font-size:13px;color:#BBBBBB;font-style:italic;margin-bottom:22px;}
+.res-tagline{
+  font-size:17px;font-style:italic;line-height:1.55;color:var(--marron);
+  max-width:340px;margin:0 auto;padding:16px 18px;
+  border-left:3px solid;border-radius:0 12px 12px 0;
+  background:rgba(255,255,255,.75);text-align:left;
+}
+
+.res-body{width:100%;max-width:500px;padding:0 20px;}
+
+.bloque{margin-top:28px;}
+.bloque-titulo{
+  font-size:11.5px;text-transform:uppercase;letter-spacing:2px;
+  font-style:italic;margin-bottom:12px;
+}
+.bloque-card{
+  background:white;border-radius:16px;padding:20px;
+  box-shadow:0 2px 14px rgba(0,0,0,.06);
+}
+.bloque-card p{font-size:15.5px;line-height:1.7;color:var(--marron);margin-bottom:10px;}
+.bloque-card p:last-child{margin-bottom:0;}
+
+/* Herramienta */
+.herramienta-paso{
+  display:flex;gap:12px;align-items:flex-start;
+  margin-bottom:14px;font-size:15px;line-height:1.6;color:var(--marron);
+}
+.paso-num{
+  min-width:28px;height:28px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:bold;color:white;flex-shrink:0;margin-top:1px;
+}
+
+/* Reflexión */
+.reflexion-box{
+  background:white;border-radius:16px;padding:20px;
+  box-shadow:0 2px 14px rgba(0,0,0,.06);
+}
+.reflexion-intro{font-size:14px;color:var(--gris);margin-bottom:14px;font-style:italic;}
+.reflexion-q{font-size:16px;font-weight:bold;line-height:1.5;color:var(--marron);
+  margin-bottom:10px;padding-left:12px;border-left:3px solid;}
+
+/* Biblio */
+.biblio{
+  font-size:12px;color:#BBBBBB;font-style:italic;line-height:1.8;
+  text-align:center;margin-top:16px;
+}
+
+/* CTA */
+.cta-card{border-radius:20px;padding:22px 20px;margin-top:8px;}
+.cta-msg{font-size:15px;line-height:1.7;margin-bottom:18px;color:var(--marron);}
+.btn-cta{
+  display:block;width:100%;padding:16px 20px;border-radius:100px;
+  color:white;border:none;font-size:15.5px;font-family:'Georgia',serif;
+  font-weight:bold;cursor:pointer;text-align:center;text-decoration:none;
+  transition:transform .15s,box-shadow .15s;
+  box-shadow:0 8px 22px rgba(0,0,0,.18);
+}
+.btn-cta:hover{transform:translateY(-2px);}
+.btn-compartir{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;margin-top:10px;padding:13px 20px;border-radius:100px;
+  background:white;border:2px solid #F0D0DA;font-size:15px;
+  font-family:'Georgia',serif;cursor:pointer;transition:background .15s;
+}
+.btn-compartir:hover{background:var(--rosa-claro);}
+
+.pie{text-align:center;margin-top:36px;padding-bottom:10px;}
+.pie-txt{font-size:12px;color:#CCCCCC;font-style:italic;line-height:1.8;}
+.pie-marca{font-size:13px;color:var(--rosa);letter-spacing:1px;margin-top:4px;}
+
+/* Animaciones */
+.fade-in{animation:fadeIn .55s ease both;}
+.slide-up{animation:slideUp .5s ease both;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ INTRO ═══════════ -->
+<div id="intro" class="pantalla activa">
+  <span class="logo-big">💕</span>
+  <p class="marca-tag">Amor Bonito</p>
+  <h1 class="intro-titulo">¿Cuál es tu<br><em>Huella de Amor?</em></h1>
+  <p class="intro-sub">Un test breve que te dice cómo fuiste programada para amar — y qué puedes hacer con eso hoy.</p>
+  <div class="chips">
+    <span class="chip">✦ Dos partes</span>
+    <span class="chip">✦ 5 minutos</span>
+    <span class="chip">✦ Recurso inmediato</span>
+  </div>
+  <button class="btn-ppal" onclick="ir('s1',0)">Quiero descubrirlo ✨</button>
+  <p class="nota-priv">Sin pasos extra. El resultado aparece aquí mismo.</p>
+</div>
+
+<!-- ═══════════ SECCIÓN 1 ═══════════ -->
+<div id="s1" class="pantalla">
+  <div class="top-bar">
+    <div class="top-row">
+      <span class="top-label" id="s1-label">Parte 1 · Quiero conocerte</span>
+      <span class="top-num" id="s1-pct">0%</span>
+    </div>
+    <div class="barra-fondo"><div class="barra-fill" id="s1-barra" style="width:0%"></div></div>
+  </div>
+  <div class="q-wrap" id="s1-wrap"></div>
+</div>
+
+<!-- ═══════════ TRANSICIÓN ═══════════ -->
+<div id="transicion" class="pantalla">
+  <span class="trans-emoji">🌸</span>
+  <h2 class="trans-titulo">¡Lista! Ahora viene<br>la parte buena</h2>
+  <p class="trans-sub">Cinco preguntas que te van a decir más sobre ti que un año de conversaciones con amigas.</p>
+  <button class="btn-ppal" onclick="ir('s2',0)">Comenzar el test →</button>
+</div>
+
+<!-- ═══════════ SECCIÓN 2 ═══════════ -->
+<div id="s2" class="pantalla">
+  <div class="top-bar">
+    <div class="top-row">
+      <span class="top-label" id="s2-label">Parte 2 · Tu Huella de Amor</span>
+      <span class="top-num" id="s2-pct">0%</span>
+    </div>
+    <div class="barra-fondo"><div class="barra-fill" id="s2-barra" style="width:0%"></div></div>
+  </div>
+  <div class="q-wrap" id="s2-wrap"></div>
+</div>
+
+<!-- ═══════════ CARGA ═══════════ -->
+<div id="carga" class="pantalla">
+  <div class="carga-emoji" id="carga-emoji">🌹</div>
+  <p class="carga-txt">Analizando tu huella de amor...</p>
+</div>
+
+<!-- ═══════════ RESULTADO ═══════════ -->
+<div id="resultado" class="pantalla">
+  <!-- Se llena con JS -->
+</div>
+
+
+<script>
+// ══════════════════════════════════════════════════════
+//  ⚙️  CONFIGURA ESTO ANTES DE PUBLICAR
+//  Reemplaza con el email donde Valeria quiere recibir
+//  las respuestas (via formsubmit.co — gratis, sin signup)
+// ══════════════════════════════════════════════════════
+const DESTINO_EMAIL = "TU_EMAIL_AQUI@gmail.com";
+
+// ══════════════════════════════════════════════════════
+//  SECCIÓN 1 — "ME GUSTARÍA CONOCERTE"
+//  Tipo: text | email | radio
+// ══════════════════════════════════════════════════════
+const S1 = [
+  { tipo:"text",  clave:"nombre",   badge:"Parte 1 · Quiero conocerte",
+    texto:"Primero lo primero — ¿cómo te llamas?",
+    placeholder:"Escribe tu nombre aquí..." },
+
+  { tipo:"email", clave:"correo",   badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Y cuál es tu correo?",
+    sub:"Te enviaré tu resultado por aquí.",
+    placeholder:"tucorreo@email.com" },
+
+  { tipo:"radio", clave:"genero",   badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Con qué género te identificas?",
+    ops:["Mujer","Hombre","No binario / otro","Prefiero no decirlo"] },
+
+  { tipo:"radio", clave:"edad",     badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Cuántos años tienes?",
+    ops:["Menos de 18","19 a 24","25 a 29","30 a 35","Más de 35"] },
+
+  { tipo:"radio", clave:"pais",     badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Desde qué país nos escribes?",
+    ops:["Colombia","México","Argentina","Venezuela","Ecuador","Otro"] },
+
+  { tipo:"radio", clave:"situacion",badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Cuál es tu situación actual?",
+    ops:["Empleada","Emprendedora","Estudiante","Desempleada","Otro"] },
+
+  { tipo:"radio", clave:"desde",    badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Hace cuánto conoces a Amor Bonito?",
+    ops:["Acabo de conocerlas (menos de 7 días)","Menos de 1 mes",
+         "De 1 a 3 meses","De 3 a 12 meses","Más de un año"] },
+
+  { tipo:"radio", clave:"ingreso",  badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Cuánto es tu ingreso mensual aproximado?",
+    sub:"Esta info nos ayuda a ofrecerte opciones que se ajusten a ti.",
+    ops:["Dependo de mis papás",
+         "Menos de $500 USD",
+         "$500 – $1,000 USD",
+         "$1,000 – $2,500 USD",
+         "Más de $2,500 USD"] },
+];
+
+// ══════════════════════════════════════════════════════
+//  SECCIÓN 2 — EL TEST DE APEGO
+//  Cada opción lleva perfil: g=guerrera f=fortaleza t=tormenta r=renacer
+// ══════════════════════════════════════════════════════
+const S2 = [
+  { badge:"Parte 2 · Tu Huella de Amor",
+    texto:"Cuando la persona que te gusta no te escribe, tú…",
+    ops:[
+      { letra:"A", txt:"Reviso el teléfono cada cinco minutos y construyo historias en mi cabeza.", p:"g" },
+      { letra:"B", txt:"Me convenzo de que tampoco me importa tanto y sigo con mi día.", p:"f" },
+      { letra:"C", txt:"Me enojo mucho y después me siento culpable de haberme enojado.", p:"t" },
+      { letra:"D", txt:"Confío en que tiene sus razones y espero sin angustia.", p:"r" },
+    ]
+  },
+  { badge:"Parte 2 · Tu Huella de Amor",
+    texto:"¿Con cuál de estas frases te identificas más?",
+    ops:[
+      { letra:"A", txt:"\"Siempre termino dando más de lo que recibo, y me pregunto si espanto el amor.\"", p:"g" },
+      { letra:"B", txt:"\"Cuando alguien se acerca demasiado, siento un impulso de alejarme, aunque me guste.\"", p:"f" },
+      { letra:"C", txt:"\"He estado en una relación donde me sentí pequeña, asustada o confundida.\"", p:"t" },
+      { letra:"D", txt:"\"Ya sé lo que no quiero. El desafío es aprender a construir lo que sí quiero.\"", p:"r" },
+    ]
+  },
+  { badge:"Parte 2 · Tu Huella de Amor",
+    texto:"En un conflicto con tu pareja (o ex), tu primer instinto es…",
+    ops:[
+      { letra:"A", txt:"Buscar hablar de inmediato, aunque no sea el momento — el silencio me desespera.", p:"g" },
+      { letra:"B", txt:"Guardar silencio y alejarme hasta que todo se calme solo.", p:"f" },
+      { letra:"C", txt:"A veces exploto, a veces me congelo — sin entender muy bien por qué.", p:"t" },
+      { letra:"D", txt:"Tomar espacio para ordenar mis ideas y después proponer una conversación.", p:"r" },
+    ]
+  },
+  { badge:"Parte 2 · Tu Huella de Amor",
+    texto:"Piensa en la última vez que alguien cruzó un límite tuyo. ¿Qué pasó?",
+    ops:[
+      { letra:"A", txt:"Aguanté mucho más de lo que debía, y cuando reaccioné me sentí culpable.", p:"g" },
+      { letra:"B", txt:"Me alejé sin decir nada, pero por dentro me dolió bastante.", p:"f" },
+      { letra:"C", txt:"No lo reconocí como un cruce de límite hasta mucho después.", p:"t" },
+      { letra:"D", txt:"Lo expresé, aunque me costó. Estoy aprendiendo a sostener mis límites.", p:"r" },
+    ]
+  },
+  { badge:"Parte 2 · Tu Huella de Amor",
+    texto:"Si pudieras hablarle a tu yo de 10 años atrás, ¿qué crees que ella creía sobre el amor?",
+    ops:[
+      { letra:"A", txt:"Que hay que ganarse el amor portándose bien o sacrificándose.", p:"g" },
+      { letra:"B", txt:"Que es mejor no necesitar a nadie para no salir lastimada.", p:"f" },
+      { letra:"C", txt:"Que el amor siempre duele, y que eso es lo normal.", p:"t" },
+      { letra:"D", txt:"Que quería una historia de amor diferente a la que vio crecer.", p:"r" },
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════════════
+//  PERFILES DE RESULTADO
+//  (La pantalla de resultado IS el recurso)
+// ══════════════════════════════════════════════════════
+const PERFILES = {
+  g: {
+    emoji:"🌹", nombre:"La Guerrera", apego:"Apego ansioso",
+    color:"#D4547A", fondo:"#FFF0F4", fondoH:"#FCE4EC",
+    tagline:'"Amo con todo... y eso a veces me cuesta todo."',
+    quien:[
+      "La Guerrera aprendió que el amor hay que ganárselo, demostrarlo y vigilarlo. Por eso en las relaciones tiende a dar más de lo que recibe, a buscar validación constante y a sentir pánico ante cualquier señal de distanciamiento.",
+      "Su sistema nervioso interpreta el silencio del otro como rechazo, aunque no lo sea. No es que seas \"demasiado\" — es que nadie te enseñó que puedes ser amada en calma, sin tener que hacer nada para merecerlo."
+    ],
+    patrones:"Tu sistema nervioso está en alerta máxima dentro del vínculo. Esto tiene nombre: hiperactivación del sistema de apego (Mikulincer & Shaver, 2007). Cuando percibes distancia, tu cerebro lanza una alarma que dice \"peligro — el amor se va\", y actúas desde ese pánico, no desde tu necesidad real.",
+    herramienta:{
+      nombre:"✦ El Semáforo de la Ansiedad",
+      intro:"La próxima vez que sientas que la ansiedad relacional se activa, haz una pausa y recorre estos tres pasos:",
+      pasos:[
+        { n:"1", txt:"<strong>Rojo — Para.</strong> Antes de mandar ese mensaje, de llamar, de buscar al otro: para. Pon una mano en el pecho y di mentalmente: \"Esto es ansiedad, no realidad.\"" },
+        { n:"2", txt:"<strong>Amarillo — Pregúntate tres cosas:</strong> ¿Tengo evidencia real de que algo está mal, o estoy llenando un silencio con una historia? ¿Esta reacción es proporcional a lo que pasó? ¿Qué necesito yo ahora mismo, independientemente del otro?" },
+        { n:"3", txt:"<strong>Verde — Elige una acción que te cuide a ti.</strong> No al vínculo — a ti. Puede ser escribir en un cuaderno, salir a caminar, llamar a una amiga, o simplemente esperar 20 minutos más." },
+      ]
+    },
+    reflexion:{
+      intro:"Escríbete en un cuaderno o en las notas del teléfono. No hay respuestas correctas.",
+      preguntas:[
+        "¿Cuándo aprendí que el amor hay que ganárselo? ¿Quién me enseñó eso?",
+        "¿Qué me digo a mí misma cuando el otro no responde de la manera que espero?",
+        "¿Qué necesitaría sentir para saber que soy amada sin tener que verificarlo constantemente?",
+      ]
+    },
+    biblio:"Teoría del apego romántico · Hazan & Shaver (1987) · Mikulincer & Shaver, Attachment in Adulthood (2007) · Johnson, Hold Me Tight (2008)",
+    cta:{
+      msg:"Valeria y su equipo trabajan específicamente con mujeres que aman mucho y reciben poco. El Programa Conecta trabaja el origen de ese patrón — tu historia familiar y cómo construir nuevas formas de vincularte desde el merecimiento.",
+      boton:"Quiero conocer el Programa Conecta →",
+      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Guerrera.%20Me%20interesa%20el%20Programa%20Conecta."
+    }
+  },
+  f: {
+    emoji:"🏰", nombre:"La Fortaleza", apego:"Apego evitativo",
+    color:"#4A90C4", fondo:"#EEF5FB", fondoH:"#DDEAF5",
+    tagline:'"Aprendí a no necesitar a nadie... y me siento muy sola."',
+    quien:[
+      "La Fortaleza construyó muros altos después de haber sido herida — o de haber crecido en un entorno donde mostrar necesidad era peligroso. Por fuera parece independiente y segura; por dentro siente una soledad difícil de nombrar.",
+      "Cuando alguien se acerca de verdad, algo en ella quiere huir. No es que no quieras amor — es que nunca aprendiste que el amor puede ser seguro."
+    ],
+    patrones:"Tu sistema nervioso aprendió a desactivarse para sobrevivir: cuando el vínculo genera amenaza, la respuesta más inteligente que encontraste fue cerrarte. Los psicólogos llaman a esto desactivación del sistema de apego (Bowlby, 1969). No es frialdad — es protección. Pero ahora esa misma protección te está impidiendo lo que más quieres.",
+    herramienta:{
+      nombre:"✦ El Escáner Corporal",
+      intro:"Cuando notes que te estás cerrando emocionalmente — en una conversación, en un momento de conexión, ante alguien que se acerca — haz este ejercicio:",
+      pasos:[
+        { n:"1", txt:"<strong>Ubica la sensación en tu cuerpo.</strong> ¿Dónde sientes el cierre? ¿Pecho tenso? ¿Respiración corta? ¿Ganas de mirar el teléfono o irte?" },
+        { n:"2", txt:"<strong>Ponle nombre sin juzgarlo.</strong> \"Siento incomodidad en el pecho. Tengo ganas de huir. Esto es mi sistema nervioso activado.\" No es una orden — es solo información." },
+        { n:"3", txt:"<strong>Haz una micro-apertura.</strong> No tienes que abrirte completamente. Solo di algo verdadero — aunque sea pequeño. \"Estoy incómoda con esto\" ya es una apertura. El objetivo es que el otro te vea aunque sea un poco." },
+      ]
+    },
+    reflexion:{
+      intro:"Escríbete en un cuaderno o en las notas del teléfono. Tómate el tiempo que necesites.",
+      preguntas:[
+        "¿Cuándo aprendí que era más seguro no necesitar a nadie? ¿Qué pasó en esa historia?",
+        "¿A quién no me he permitido ver de verdad por miedo a que eso me haga vulnerable?",
+        "¿Qué le diría a alguien cercano si supiera que no va a juzgarme?",
+      ]
+    },
+    biblio:"Teoría del apego · Bowlby, Attachment and Loss (1969) · Ainsworth et al., Patterns of Attachment (1978) · Main & Solomon, Disorganized Attachment (1990)",
+    cta:{
+      msg:"No tienes que comprometerte a nada grande para empezar. Una Valoración Individual con Amor Bonito es una hora donde Valeria o una de sus psicólogas te escucha sin juzgarte e identifica lo que está pasando. Sin presión.",
+      boton:"Reservar mi Valoración Individual →",
+      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Fortaleza.%20Me%20interesa%20la%20Valoraci%C3%B3n%20Individual."
+    }
+  },
+  t: {
+    emoji:"🌪️", nombre:"La Tormenta", apego:"Apego desorganizado",
+    color:"#8B5FA8", fondo:"#F5EBF8", fondoH:"#EAD5F2",
+    tagline:'"Quiero que me quieran, pero cuando me quieren me da miedo."',
+    quien:[
+      "La Tormenta ha vivido relaciones donde el amor y el daño coexistían, lo que enseñó al sistema nervioso que las personas cercanas pueden ser simultáneamente fuente de consuelo y de peligro.",
+      "Esto genera un patrón contradictorio: deseas intimidad pero la temes, te acercas y luego huyes, o te quedas cuando deberías irte. No estás rota. Tu sistema nervioso aprendió a sobrevivir en lo impredecible — y eso se puede sanar."
+    ],
+    patrones:"Lo que describes tiene nombre científico: apego desorganizado, identificado por Mary Main y Judith Solomon en 1990. Ocurre cuando la misma figura que debía ser fuente de seguridad también fue fuente de amenaza. El resultado es un sistema nervioso que no sabe cómo responder al amor — porque amor y peligro llegaron juntos.",
+    herramienta:{
+      nombre:"✦ El Ancla de Seguridad",
+      intro:"Cuando sientas pánico, confusión o el impulso de huir o atacar en un vínculo, usa este anclaje en tres pasos:",
+      pasos:[
+        { n:"1", txt:"<strong>5-4-3-2-1 (activa los sentidos).</strong> Nombra 5 cosas que puedes ver, 4 que puedes tocar, 3 que puedes escuchar, 2 que puedes oler, 1 que puedes saborear. Esto interrumpe el circuito de activación del sistema nervioso." },
+        { n:"2", txt:"<strong>La frase de regreso.</strong> Di en voz alta o mentalmente: \"Estoy en [lugar]. Estoy a salvo ahora mismo. Lo que siento es una memoria, no el presente.\"" },
+        { n:"3", txt:"<strong>Elige una acción segura.</strong> No decidas nada importante en ese estado. Solo haz una cosa que tu cuerpo reconozca como segura: un vaso de agua, sentarte en el suelo, llamar a alguien de confianza." },
+      ]
+    },
+    reflexion:{
+      intro:"Este ejercicio no tiene prisa. Hazlo en un momento tranquila, con calma.",
+      preguntas:[
+        "¿En qué relación de mi vida aprendí que el amor y el daño podían coexistir? ¿Cómo era eso?",
+        "¿Cuándo fue la última vez que estuve en un espacio donde me sentí completamente segura? ¿Cómo era ese espacio, qué tenía?",
+        "Si mi sistema nervioso pudiera hablar, ¿qué necesitaría para sentirse seguro en una relación?",
+      ]
+    },
+    biblio:"Main & Solomon, Disorganized/Disoriented Attachment (1990) · Herman, Trauma and Recovery (1992) · Walker, Complex PTSD: From Surviving to Thriving (2013)",
+    cta:{
+      msg:"Lo que describes no es una falla — es una respuesta aprendida que se puede sanar con el acompañamiento correcto. Amor Bonito fue construido para mujeres exactamente como tú. El Programa Reconstruye tiene sesiones individuales, grupales y acompañamiento continuo.",
+      boton:"Quiero saber más sobre Reconstruye →",
+      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Tormenta.%20Me%20interesa%20el%20Programa%20Reconstruye."
+    }
+  },
+  r: {
+    emoji:"🌱", nombre:"La Renacer", apego:"En proceso de sanación",
+    color:"#3DAA72", fondo:"#EBF8F2", fondoH:"#D4F0E3",
+    tagline:'"Ya sé lo que no quiero. Ahora aprendo a construir lo que sí merezco."',
+    quien:[
+      "La Renacer ya hizo una parte del trabajo más difícil: reconoció el patrón, salió (o está saliendo) de él, y se dio cuenta de que quiere algo diferente.",
+      "Pero el camino entre \"ya sé lo que no quiero\" y \"soy capaz de construir lo que sí quiero\" tiene sus propios obstáculos: desconfianza en sí misma, miedo a repetir, duelo inconcluso. No estás al inicio del proceso — estás en la mitad, y mereces acompañamiento para cruzar."
+    ],
+    patrones:"Lo que estás haciendo tiene nombre en la psicología del apego: desarrollar un apego ganado (earned secure attachment). Hazan y Shaver (1987) demostraron que los estilos de apego no son destino — se pueden cambiar con trabajo consciente. Tú ya iniciaste ese trabajo. La investigación también muestra que el principal predictor de éxito en ese camino es el acompañamiento de alguien que te ayude a integrar la experiencia.",
+    herramienta:{
+      nombre:"✦ El Termómetro de la Conexión",
+      intro:"Antes de invertir emocionalmente en alguien nuevo, hazte estas preguntas. No son para desconfiar — son para elegir conscientemente:",
+      pasos:[
+        { n:"1", txt:"<strong>¿Esta persona está disponible emocionalmente?</strong> ¿Puede hablar de sus emociones? ¿Responde con coherencia entre lo que dice y lo que hace? La disponibilidad emocional no se declara — se demuestra en el tiempo." },
+        { n:"2", txt:"<strong>¿Me siento más yo misma o menos yo misma con esta persona?</strong> Las relaciones sanas amplifican quién eres. Las dañinas te reducen. Tu respuesta a esta pregunta es un dato importante." },
+        { n:"3", txt:"<strong>¿Estoy siendo atraída por esta persona o por lo que me activa?</strong> A veces la atracción intensa es un patrón de apego siendo activado, no conexión real. La pregunta no es \"¿qué tan fuerte lo siento?\" sino \"¿cómo me siento cuando estoy con esa persona?\"" },
+      ]
+    },
+    reflexion:{
+      intro:"Tómate un momento de calma. Estas preguntas son para ti.",
+      preguntas:[
+        "¿Qué necesito soltar de la relación anterior para poder recibir algo nuevo? ¿Qué estoy cargando que ya no me pertenece?",
+        "¿Qué aprendí sobre mí misma en el proceso que ya viví? ¿Qué capacidad descubrí que no sabía que tenía?",
+        "¿Cómo se vería una relación que me haga sentir segura, vista y libre al mismo tiempo?",
+      ]
+    },
+    biblio:"Hazan & Shaver, Romantic Love as Attachment (1987) · Mikulincer & Shaver, Attachment in Adulthood (2007) · Johnson, Hold Me Tight (2008)",
+    cta:{
+      msg:"Ya diste los pasos más difíciles. El Programa Transforma puede acompañarte a construir el amor bonito que mereces — con 22 sesiones, herramientas de integración, grupo de mujeres y acompañamiento 24/7 de tu terapeuta.",
+      boton:"Conoce el Programa Transforma →",
+      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Renacer.%20Me%20interesa%20el%20Programa%20Transforma."
+    }
+  }
+};
+
+// ══════════════════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════════════════
+let estado = {
+  seccion: null,   // 's1' | 's2'
+  idx: 0,
+  datos: {},       // respuestas S1
+  votos: {g:0,f:0,t:0,r:0},  // puntos S2
+  selActual: null,
+};
+
+// ══════════════════════════════════════════════════════
+//  NAVEGACIÓN
+// ══════════════════════════════════════════════════════
+function ir(sec, idx) {
+  document.querySelectorAll('.pantalla').forEach(p=>p.classList.remove('activa'));
+  document.getElementById(sec).classList.add('activa');
+  estado.seccion = sec; estado.idx = idx; estado.selActual = null;
+  window.scrollTo(0,0);
+  if(sec==='s1') renderS1(idx);
+  if(sec==='s2') renderS2(idx);
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER SECCIÓN 1
+// ══════════════════════════════════════════════════════
+function renderS1(idx) {
+  const q   = S1[idx];
+  const pct = Math.round((idx/S1.length)*100);
+  document.getElementById('s1-barra').style.width = pct+'%';
+  document.getElementById('s1-pct').textContent   = pct+'%';
+  document.getElementById('s1-label').textContent = q.badge;
+
+  let inputHtml = '';
+  if(q.tipo==='text' || q.tipo==='email') {
+    inputHtml = `
+      <input id="inp" type="${q.tipo}" class="input-txt"
+        placeholder="${q.placeholder||''}"
+        value="${estado.datos[q.clave]||''}"
+        oninput="onTextInput(this)"
+        autocomplete="${q.tipo==='email'?'email':'name'}"
+      />`;
+  } else {
+    const guardada = estado.datos[q.clave];
+    inputHtml = `<div class="opciones">` +
+      q.ops.map((op,i)=>`
+        <button class="opt${guardada===op?' sel':''}" onclick="selOpt(this,'${esc(op)}')">
+          <span class="opt-letra">${String.fromCharCode(65+i)}</span>
+          <span>${op}</span>
+        </button>`).join('') +
+    `</div>`;
+  }
+
+  document.getElementById('s1-wrap').innerHTML = `
+    <div class="fade-in">
+      <div class="q-seccion-badge">${q.badge}</div>
+      <p class="q-num">Pregunta ${idx+1} de ${S1.length}</p>
+      <p class="q-texto">${q.texto}</p>
+      ${q.sub?`<p style="font-size:13px;color:#AAA;font-style:italic;margin:-14px 0 18px;">${q.sub}</p>`:''}
+      ${inputHtml}
+      <button class="btn-sig${(estado.datos[q.clave]&&estado.datos[q.clave].trim())?'  on':''}" id="btn-s1"
+        onclick="avanzarS1()">
+        ${idx<S1.length-1?'Continuar →':'¡Listo! Vamos al test ✨'}
+      </button>
+    </div>`;
+
+  // Si ya hay valor guardado, habilitar botón
+  checkBtnS1();
+
+  // Focus en input texto
+  if(q.tipo==='text'||q.tipo==='email'){
+    setTimeout(()=>{ const el=document.getElementById('inp'); if(el)el.focus(); },300);
+  }
+}
+
+function checkBtnS1(){
+  const q = S1[estado.idx];
+  const val = estado.datos[q.clave];
+  const btn = document.getElementById('btn-s1');
+  if(!btn) return;
+  const ok = val && val.toString().trim().length>0;
+  btn.classList.toggle('on', !!ok);
+}
+
+function onTextInput(el){
+  const q = S1[estado.idx];
+  estado.datos[q.clave] = el.value;
+  checkBtnS1();
+}
+
+function selOpt(btn, val){
+  document.querySelectorAll('#s1-wrap .opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const q = S1[estado.idx];
+  estado.datos[q.clave] = val;
+  checkBtnS1();
+}
+
+function avanzarS1(){
+  const q = S1[estado.idx];
+  if(!estado.datos[q.clave]||!estado.datos[q.clave].toString().trim()) return;
+  if(estado.idx < S1.length-1){
+    ir('s1', estado.idx+1);
+  } else {
+    // Mostrar transición
+    document.querySelectorAll('.pantalla').forEach(p=>p.classList.remove('activa'));
+    document.getElementById('transicion').classList.add('activa');
+    window.scrollTo(0,0);
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER SECCIÓN 2
+// ══════════════════════════════════════════════════════
+function renderS2(idx){
+  const q   = S2[idx];
+  const pct = Math.round(((idx+1)/S2.length)*100);
+  document.getElementById('s2-barra').style.width = pct+'%';
+  document.getElementById('s2-pct').textContent   = pct+'%';
+  document.getElementById('s2-label').textContent = q.badge;
+
+  document.getElementById('s2-wrap').innerHTML = `
+    <div class="fade-in">
+      <div class="q-seccion-badge">${q.badge}</div>
+      <p class="q-num">Pregunta ${idx+1} de ${S2.length}</p>
+      <p class="q-texto">${q.texto}</p>
+      <div class="opciones">
+        ${q.ops.map(op=>`
+          <button class="opt" onclick="selS2(this,'${op.p}')">
+            <span class="opt-letra">${op.letra}</span>
+            <span>${op.txt}</span>
+          </button>`).join('')}
+      </div>
+      <button class="btn-sig" id="btn-s2" onclick="avanzarS2()">
+        ${idx<S2.length-1?'Continuar →':'Ver mi resultado ✨'}
+      </button>
+    </div>`;
+  estado.selActual = null;
+}
+
+function selS2(btn, perfil){
+  document.querySelectorAll('#s2-wrap .opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  estado.selActual = perfil;
+  document.getElementById('btn-s2').classList.add('on');
+}
+
+function avanzarS2(){
+  if(!estado.selActual) return;
+  estado.votos[estado.selActual]++;
+  if(estado.idx < S2.length-1){
+    ir('s2', estado.idx+1);
+  } else {
+    mostrarCarga();
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  CARGA
+// ══════════════════════════════════════════════════════
+function mostrarCarga(){
+  document.querySelectorAll('.pantalla').forEach(p=>p.classList.remove('activa'));
+  document.getElementById('carga').classList.add('activa');
+  window.scrollTo(0,0);
+  const emojis=['🌸','💕','🌹','✨','🌱','💫'];
+  let i=0;
+  const iv=setInterval(()=>{
+    i=(i+1)%emojis.length;
+    document.getElementById('carga-emoji').textContent=emojis[i];
+  },320);
+  setTimeout(()=>{ clearInterval(iv); enviarDatos(); mostrarResultado(); },2400);
+}
+
+// ══════════════════════════════════════════════════════
+//  ENVÍO DE DATOS (background, sin interrumpir UX)
+// ══════════════════════════════════════════════════════
+async function enviarDatos(){
+  if(!DESTINO_EMAIL || DESTINO_EMAIL==="TU_EMAIL_AQUI@gmail.com") return;
+  const perfil = calcularPerfil();
+  try {
+    const fd = new FormData();
+    fd.append('_captcha','false');
+    fd.append('_template','table');
+    fd.append('_subject','✨ Nueva respuesta — Quiz Amor Bonito');
+    Object.entries(estado.datos).forEach(([k,v])=>fd.append(k,v));
+    fd.append('Perfil_resultado', PERFILES[perfil].nombre);
+    fd.append('Votos_detalle', JSON.stringify(estado.votos));
+    await fetch(`https://formsubmit.co/${DESTINO_EMAIL}`,{method:'POST',body:fd});
+  } catch(e){ /* silent */ }
+}
+
+// ══════════════════════════════════════════════════════
+//  RESULTADO
+// ══════════════════════════════════════════════════════
+function calcularPerfil(){
+  return Object.entries(estado.votos).sort((a,b)=>b[1]-a[1])[0][0];
+}
+
+function mostrarResultado(){
+  const clave  = calcularPerfil();
+  const p      = PERFILES[clave];
+  const nombre = estado.datos.nombre ? estado.datos.nombre.split(' ')[0] : '';
+
+  const pasoHtml = p.herramienta.pasos.map(paso=>`
+    <div class="herramienta-paso">
+      <div class="paso-num" style="background:${p.color}">${paso.n}</div>
+      <div>${paso.txt}</div>
+    </div>`).join('');
+
+  const reflexHtml = p.reflexion.preguntas.map(q=>`
+    <div class="reflexion-q" style="border-color:${p.color}">${q}</div>`).join('');
+
+  document.getElementById('resultado').innerHTML = `
+    <div class="res-header slide-up" style="background:${p.fondo}">
+      <span class="res-emoji-big">${p.emoji}</span>
+      <p class="res-premarca">Tu Huella de Amor${nombre?' · Hola, '+nombre:''}</p>
+      <p class="res-pre">Eres</p>
+      <h2 class="res-nombre" style="color:${p.color}">${p.nombre}</h2>
+      <p class="res-apego">${p.apego}</p>
+      <p class="res-tagline" style="border-color:${p.color}">${p.tagline}</p>
+    </div>
+
+    <div class="res-body fade-in">
+
+      <div class="bloque">
+        <p class="bloque-titulo" style="color:${p.color}">✦ Así funciona tu corazón</p>
+        <div class="bloque-card">
+          ${p.quien.map(t=>`<p>${t}</p>`).join('')}
+        </div>
+      </div>
+
+      <div class="bloque">
+        <p class="bloque-titulo" style="color:${p.color}">✦ Lo que está pasando en tu sistema nervioso</p>
+        <div class="bloque-card">
+          <p>${p.patrones}</p>
+        </div>
+      </div>
+
+      <div class="bloque">
+        <p class="bloque-titulo" style="color:${p.color}">✦ ${p.herramienta.nombre}</p>
+        <div class="bloque-card">
+          <p style="color:${p.color};font-weight:bold;margin-bottom:16px">${p.herramienta.intro}</p>
+          ${pasoHtml}
+        </div>
+      </div>
+
+      <div class="bloque">
+        <p class="bloque-titulo" style="color:${p.color}">✦ Tu reflexión para esta semana</p>
+        <div class="reflexion-box">
+          <p class="reflexion-intro">${p.reflexion.intro}</p>
+          ${reflexHtml}
+        </div>
+      </div>
+
+      <p class="biblio">${p.biblio}</p>
+
+      <div class="bloque">
+        <p class="bloque-titulo" style="color:${p.color}">✦ Tu siguiente paso</p>
+        <div class="cta-card" style="background:${p.fondo}">
+          <p class="cta-msg">${p.cta.msg}</p>
+          <a class="btn-cta" href="${p.cta.link}" target="_blank"
+            style="background:${p.color};box-shadow:0 8px 22px ${p.color}44">
+            ${p.cta.boton}
+          </a>
+          <button class="btn-compartir" style="color:${p.color};border-color:${p.color}33"
+            onclick="compartir('${p.nombre}','${p.emoji}')">
+            📲 Compartir mi resultado
+          </button>
+        </div>
+      </div>
+
+      <div class="pie">
+        <p class="pie-txt">Quiz basado en la Teoría del Apego Romántico<br>
+          Bowlby (1969) · Ainsworth (1978) · Hazan & Shaver (1987)</p>
+        <p class="pie-marca">💕 Amor Bonito</p>
+      </div>
+
+    </div>`;
+
+  document.querySelectorAll('.pantalla').forEach(pp=>pp.classList.remove('activa'));
+  document.getElementById('resultado').classList.add('activa');
+  window.scrollTo(0,0);
+}
+
+function compartir(nombre, emoji){
+  const txt=`${emoji} Hice el test de Amor Bonito y soy ${nombre}. ¿Cuál será tu Huella de Amor?`;
+  if(navigator.share){
+    navigator.share({title:'¿Cuál es tu Huella de Amor?',text:txt,url:window.location.href}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(txt+' '+window.location.href)
+      .then(()=>alert('¡Texto copiado! Pégalo donde quieras compartirlo.'))
+      .catch(()=>alert('Copia esto:\n\n'+txt));
+  }
+}
+
+function esc(str){ return str.replace(/'/g,"&#39;").replace(/"/g,"&quot;"); }
+</script>
+</body>
+</html>
