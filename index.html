@@ -116,6 +116,15 @@ body{font-family:'Georgia',serif;background:var(--crema);color:var(--marron);}
 .btn-sig.on{opacity:1;pointer-events:all;}
 .btn-sig.on:hover{transform:translateY(-1px);}
 
+/* Botón anterior */
+.btn-ant{
+  display:block;width:100%;margin-top:10px;
+  background:none;color:var(--gris);border:2px solid #E8D8D8;border-radius:100px;
+  padding:12px;font-size:15px;font-family:'Georgia',serif;
+  cursor:pointer;transition:background .15s,color .15s;
+}
+.btn-ant:hover{background:var(--rosa-hover);color:var(--marron);}
+
 /* ──────────── TRANSICIÓN SECCIONES ──────────── */
 #transicion{
   background:linear-gradient(160deg,#F2C6C2 0%,#F0E6E8 100%);
@@ -355,6 +364,58 @@ const S1 = [
          "$500 – $1,000 USD",
          "$1,000 – $2,500 USD",
          "Más de $2,500 USD"] },
+
+  { tipo:"radio", clave:"situacion_amor", badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Cómo te sientes actualmente en tus relaciones (o en tu vida amorosa)?",
+    ops:["Me siento insegura y con miedo constante a perder a la otra persona",
+         "Siento que doy más de lo que recibo",
+         "Me cuesta poner límites y termino abandonándome",
+         "Estoy trabajando en mí, pero todavía repito patrones",
+         "Me siento bastante segura, pero quiero relaciones más conscientes y profundas"] },
+
+  { tipo:"radio", clave:"cuesta_relacion", badge:"Parte 1 · Quiero conocerte",
+    texto:"Cuando estás en una relación, ¿Qué es lo que más te cuesta?",
+    ops:["Poner límites sin sentir culpa",
+         "Expresar lo que necesito",
+         "No depender emocionalmente",
+         "Elegir parejas disponibles emocionalmente",
+         "Confiar plenamente"] },
+
+  { tipo:"radio", clave:"deseas_relacion", badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Qué es lo que más deseas experimentar en una relación?",
+    ops:["Seguridad emocional",
+         "Comunicación honesta",
+         "Pasión y conexión profunda",
+         "Estabilidad sin perder mi independencia",
+         "Sentirme elegida sin tener que esforzarme de más"] },
+
+  { tipo:"radio", clave:"inversion", badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Cuánto estarías dispuesta a invertir para sentirte segura dentro de ti y construir una relación sana y amorosa sin abandonarte?",
+    ops:["50 – 100USD para empezar a trabajar en mi seguridad y autoestima",
+         "100 – 300USD para romper patrones y aprender a construir relaciones conscientes",
+         "300 – 800USD para una transformación profunda con acompañamiento",
+         "Más de 800USD si eso significa cambiar definitivamente mi forma de relacionarme",
+         "No me importa la inversión si realmente transformo mi vida amorosa"] },
+
+  { tipo:"text", clave:"obstaculo", badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Cuál es tu mayor obstáculo hoy para tener la relación que deseas?",
+    placeholder:"Escribe tu respuesta aquí..." },
+
+  { tipo:"radio", clave:"patron_repetido", badge:"Parte 1 · Quiero conocerte",
+    texto:"Si sientes que repites patrones, ¿Cuál se repite más en tu historia?",
+    ops:["Relaciones con personas emocionalmente no disponibles",
+         "Celos e inseguridad constante",
+         "Dependencia emocional",
+         "Relaciones intensas pero inestables",
+         "Me cuesta comprometerme"] },
+
+  { tipo:"text", clave:"aprender", badge:"Parte 1 · Quiero conocerte",
+    texto:"¿Qué te gustaría aprender de mí para superar esos retos y desarrollar tu máximo potencial?",
+    placeholder:"Escribe tu respuesta aquí..." },
+
+  { tipo:"text", clave:"cafe", badge:"Parte 1 · Quiero conocerte",
+    texto:"Si tuvieras la oportunidad de tomar un café conmigo, ¿Qué me preguntarías?",
+    placeholder:"Escribe tu respuesta aquí..." },
 ];
 
 // ══════════════════════════════════════════════════════
@@ -444,7 +505,7 @@ const PERFILES = {
     cta:{
       msg:"Valeria y su equipo trabajan específicamente con mujeres que aman mucho y reciben poco. El Programa Conecta trabaja el origen de ese patrón — tu historia familiar y cómo construir nuevas formas de vincularte desde el merecimiento.",
       boton:"Quiero conocer el Programa Conecta →",
-      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Guerrera.%20Me%20interesa%20el%20Programa%20Conecta."
+      link:"https://wa.me/573008325355?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Guerrera.%20Me%20interesa%20el%20Programa%20Conecta."
     }
   },
   f: {
@@ -477,7 +538,7 @@ const PERFILES = {
     cta:{
       msg:"No tienes que comprometerte a nada grande para empezar. Una Valoración Individual con Amor Bonito es una hora donde Valeria o una de sus psicólogas te escucha sin juzgarte e identifica lo que está pasando. Sin presión.",
       boton:"Reservar mi Valoración Individual →",
-      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Fortaleza.%20Me%20interesa%20la%20Valoraci%C3%B3n%20Individual."
+      link:"https://wa.me/573008325355?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Fortaleza.%20Me%20interesa%20la%20Valoraci%C3%B3n%20Individual."
     }
   },
   t: {
@@ -510,7 +571,7 @@ const PERFILES = {
     cta:{
       msg:"Lo que describes no es una falla — es una respuesta aprendida que se puede sanar con el acompañamiento correcto. Amor Bonito fue construido para mujeres exactamente como tú. El Programa Reconstruye tiene sesiones individuales, grupales y acompañamiento continuo.",
       boton:"Quiero saber más sobre Reconstruye →",
-      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Tormenta.%20Me%20interesa%20el%20Programa%20Reconstruye."
+      link:"https://wa.me/573008325355?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Tormenta.%20Me%20interesa%20el%20Programa%20Reconstruye."
     }
   },
   r: {
@@ -543,7 +604,7 @@ const PERFILES = {
     cta:{
       msg:"Ya diste los pasos más difíciles. El Programa Transforma puede acompañarte a construir el amor bonito que mereces — con 22 sesiones, herramientas de integración, grupo de mujeres y acompañamiento 24/7 de tu terapeuta.",
       boton:"Conoce el Programa Transforma →",
-      link:"https://wa.me/573000000000?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Renacer.%20Me%20interesa%20el%20Programa%20Transforma."
+      link:"https://wa.me/573008325355?text=Hola%2C%20hice%20el%20quiz%20y%20soy%20La%20Renacer.%20Me%20interesa%20el%20Programa%20Transforma."
     }
   }
 };
@@ -556,6 +617,7 @@ let estado = {
   idx: 0,
   datos: {},       // respuestas S1
   votos: {g:0,f:0,t:0,r:0},  // puntos S2
+  s2sels: [],      // selecciones S2 por pregunta (para navegación hacia atrás)
   selActual: null,
 };
 
@@ -612,6 +674,7 @@ function renderS1(idx) {
         onclick="avanzarS1()">
         ${idx<S1.length-1?'Continuar →':'¡Listo! Vamos al test ✨'}
       </button>
+      <button class="btn-ant" onclick="retrocederS1()">← Anterior</button>
     </div>`;
 
   // Si ya hay valor guardado, habilitar botón
@@ -659,6 +722,16 @@ function avanzarS1(){
   }
 }
 
+function retrocederS1(){
+  if(estado.idx===0){
+    document.querySelectorAll('.pantalla').forEach(p=>p.classList.remove('activa'));
+    document.getElementById('intro').classList.add('activa');
+    window.scrollTo(0,0);
+    return;
+  }
+  ir('s1', estado.idx-1);
+}
+
 // ══════════════════════════════════════════════════════
 //  RENDER SECCIÓN 2
 // ══════════════════════════════════════════════════════
@@ -669,6 +742,8 @@ function renderS2(idx){
   document.getElementById('s2-pct').textContent   = pct+'%';
   document.getElementById('s2-label').textContent = q.badge;
 
+  const guardadoS2 = estado.s2sels[idx] || null;
+
   document.getElementById('s2-wrap').innerHTML = `
     <div class="fade-in">
       <div class="q-seccion-badge">${q.badge}</div>
@@ -676,16 +751,17 @@ function renderS2(idx){
       <p class="q-texto">${q.texto}</p>
       <div class="opciones">
         ${q.ops.map(op=>`
-          <button class="opt" onclick="selS2(this,'${op.p}')">
+          <button class="opt${guardadoS2===op.p?' sel':''}" onclick="selS2(this,'${op.p}')">
             <span class="opt-letra">${op.letra}</span>
             <span>${op.txt}</span>
           </button>`).join('')}
       </div>
-      <button class="btn-sig" id="btn-s2" onclick="avanzarS2()">
+      <button class="btn-sig${guardadoS2?' on':''}" id="btn-s2" onclick="avanzarS2()">
         ${idx<S2.length-1?'Continuar →':'Ver mi resultado ✨'}
       </button>
+      <button class="btn-ant" onclick="retrocederS2()">← Anterior</button>
     </div>`;
-  estado.selActual = null;
+  estado.selActual = guardadoS2;
 }
 
 function selS2(btn, perfil){
@@ -697,12 +773,22 @@ function selS2(btn, perfil){
 
 function avanzarS2(){
   if(!estado.selActual) return;
-  estado.votos[estado.selActual]++;
+  estado.s2sels[estado.idx] = estado.selActual;
   if(estado.idx < S2.length-1){
     ir('s2', estado.idx+1);
   } else {
     mostrarCarga();
   }
+}
+
+function retrocederS2(){
+  if(estado.idx===0){
+    document.querySelectorAll('.pantalla').forEach(p=>p.classList.remove('activa'));
+    document.getElementById('transicion').classList.add('activa');
+    window.scrollTo(0,0);
+    return;
+  }
+  ir('s2', estado.idx-1);
 }
 
 // ══════════════════════════════════════════════════════
@@ -734,7 +820,9 @@ async function enviarDatos(){
     fd.append('_subject','✨ Nueva respuesta — Quiz Amor Bonito');
     Object.entries(estado.datos).forEach(([k,v])=>fd.append(k,v));
     fd.append('Perfil_resultado', PERFILES[perfil].nombre);
-    fd.append('Votos_detalle', JSON.stringify(estado.votos));
+    const votosDetalle={g:0,f:0,t:0,r:0};
+    estado.s2sels.forEach(sel=>{ if(sel) votosDetalle[sel]++; });
+    fd.append('Votos_detalle', JSON.stringify(votosDetalle));
     await fetch(`https://formsubmit.co/${DESTINO_EMAIL}`,{method:'POST',body:fd});
   } catch(e){ /* silent */ }
 }
@@ -743,7 +831,9 @@ async function enviarDatos(){
 //  RESULTADO
 // ══════════════════════════════════════════════════════
 function calcularPerfil(){
-  return Object.entries(estado.votos).sort((a,b)=>b[1]-a[1])[0][0];
+  const votos={g:0,f:0,t:0,r:0};
+  estado.s2sels.forEach(sel=>{ if(sel) votos[sel]++; });
+  return Object.entries(votos).sort((a,b)=>b[1]-a[1])[0][0];
 }
 
 function mostrarResultado(){
@@ -847,7 +937,7 @@ function compartir(nombre, emoji){
 function esc(str){ return str.replace(/'/g,"&#39;").replace(/"/g,"&quot;"); }
 
 function reiniciar(){
-  estado = {seccion:null,idx:0,datos:{},votos:{g:0,f:0,t:0,r:0},selActual:null};
+  estado = {seccion:null,idx:0,datos:{},votos:{g:0,f:0,t:0,r:0},s2sels:[],selActual:null};
   document.querySelectorAll('.pantalla').forEach(p=>p.classList.remove('activa'));
   document.getElementById('intro').classList.add('activa');
   window.scrollTo(0,0);
