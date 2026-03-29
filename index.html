@@ -651,7 +651,8 @@ function renderS1(idx) {
         value="${estado.datos[q.clave]||''}"
         oninput="onTextInput(this)"
         autocomplete="${q.tipo==='email'?'email':'name'}"
-      />`;
+      />
+      ${q.tipo==='email'?'<p id="email-error" style="display:none;font-size:13px;color:#E05555;margin-top:8px;font-style:italic;">Por favor ingresa un correo válido (ej: nombre@dominio.com)</p>':''}`;
   } else {
     const guardada = estado.datos[q.clave];
     inputHtml = `<div class="opciones">` +
@@ -691,8 +692,14 @@ function checkBtnS1(){
   const val = estado.datos[q.clave];
   const btn = document.getElementById('btn-s1');
   if(!btn) return;
-  const ok = val && val.toString().trim().length>0;
-  btn.classList.toggle('on', !!ok);
+  let ok = !!(val && val.toString().trim().length>0);
+  if(ok && q.tipo==='email'){
+    const emailValido = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val.trim());
+    const err = document.getElementById('email-error');
+    if(err) err.style.display = emailValido ? 'none' : 'block';
+    ok = emailValido;
+  }
+  btn.classList.toggle('on', ok);
 }
 
 function onTextInput(el){
@@ -820,11 +827,12 @@ async function enviarDatos() {
   try {
     await fetch("https://script.google.com/macros/s/AKfycbzQ1_TDJmM-wpB-c_jJ3QD1y1ASAyYo_GOaNa190p0Y31ZvZtp57nfrovV55oHDWQ2O-A/exec", {
       method: "POST",
+      mode: "no-cors",                          // ← esto es clave
+      headers: { "Content-Type": "text/plain" }, // ← no application/json
       body: JSON.stringify(payload)
     });
   } catch(e) { /* silent */ }
 }
-
 // ══════════════════════════════════════════════════════
 //  RESULTADO
 // ══════════════════════════════════════════════════════
