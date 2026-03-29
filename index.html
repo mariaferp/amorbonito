@@ -810,21 +810,19 @@ function mostrarCarga(){
 // ══════════════════════════════════════════════════════
 //  ENVÍO DE DATOS (background, sin interrumpir UX)
 // ══════════════════════════════════════════════════════
-async function enviarDatos(){
-  if(!DESTINO_EMAIL || DESTINO_EMAIL==="TU_EMAIL_AQUI@gmail.com") return;
+async function enviarDatos() {
   const perfil = calcularPerfil();
+  const payload = {
+    ...estado.datos,
+    perfil: PERFILES[perfil].nombre,
+    timestamp: new Date().toISOString()
+  };
   try {
-    const fd = new FormData();
-    fd.append('_captcha','false');
-    fd.append('_template','table');
-    fd.append('_subject','✨ Nueva respuesta — Quiz Amor Bonito');
-    Object.entries(estado.datos).forEach(([k,v])=>fd.append(k,v));
-    fd.append('Perfil_resultado', PERFILES[perfil].nombre);
-    const votosDetalle={g:0,f:0,t:0,r:0};
-    estado.s2sels.forEach(sel=>{ if(sel) votosDetalle[sel]++; });
-    fd.append('Votos_detalle', JSON.stringify(votosDetalle));
-    await fetch(`https://formsubmit.co/${DESTINO_EMAIL}`,{method:'POST',body:fd});
-  } catch(e){ /* silent */ }
+    await fetch("https://script.google.com/macros/s/AKfycbzQ1_TDJmM-wpB-c_jJ3QD1y1ASAyYo_GOaNa190p0Y31ZvZtp57nfrovV55oHDWQ2O-A/exec", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  } catch(e) { /* silent */ }
 }
 
 // ══════════════════════════════════════════════════════
